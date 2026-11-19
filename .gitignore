@@ -9,6 +9,10 @@ Desktop.ini
 .vscode/
 .idea/
 
+# Node
+node_modules/
+npm-debug.log*
+
 # Secrets and local env (never commit)
 .env
 .env.*
@@ -16,5 +20,6 @@ Desktop.ini
 *.key
 
 # Local account data must stay off the web folder and off GitHub
+data/
 server/reset-outbox.txt
 server/*.out.txt
