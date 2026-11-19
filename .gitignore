@@ -1,0 +1,20 @@
+# Local OS junk
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Editor / temp
+*.tmp
+*.log
+.vscode/
+.idea/
+
+# Secrets and local env (never commit)
+.env
+.env.*
+*.pem
+*.key
+
+# Local account data must stay off the web folder and off GitHub
+server/reset-outbox.txt
+server/*.out.txt

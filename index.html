@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4efe6">
+  <title>Vexora — quiz de bandeiras</title>
+  <meta name="description" content="Vexora é um jogo de bandeiras com conta, perfil e amigos.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Ccircle cx='24' cy='24' r='22' fill='%231b2830'/%3E%3Cpath d='M24 7l6 15-6 4-6-4z' fill='%23ffb703'/%3E%3Cpath d='M24 41l-6-15 6-4 6 4z' fill='white'/%3E%3Ccircle cx='24' cy='24' r='3' fill='%23ef3d2f'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Manrope:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body data-screen="home" class="is-locked">
+  <div id="fx" aria-hidden="true"></div>
+  <p id="live" class="sr" aria-live="polite"></p>
+  <div id="toast" class="toast" hidden></div>
+
+  <div id="gate" class="gate">
+    <form id="authForm" class="auth-card" novalidate>
+      <p class="kicker" id="authKicker">Sua conta</p>
+      <h1 id="authTitle">Entrar no Vexora</h1>
+      <p class="lead" id="authLead">A pontuação, o nível e os amigos ficam ligados à sua conta.</p>
+      <p class="form-msg" id="authMsg" hidden></p>
+      <div id="authFields"></div>
+      <button class="btn primary" id="authSubmit" type="submit">Entrar</button>
+      <p class="auth-switch" id="authSwitch"></p>
+    </form>
+  </div>
+
+  <header class="topbar">
+    <button class="brand" type="button" data-go="home">
+      <span class="brand-mark" aria-hidden="true">
+        <svg viewBox="0 0 48 48" width="42" height="42">
+          <circle cx="24" cy="24" r="22" fill="#1b2830"></circle>
+          <path d="M24 7l6 15-6 4-6-4z" fill="#ffb703"></path>
+          <path d="M24 41l-6-15 6-4 6 4z" fill="#fff"></path>
+          <circle cx="24" cy="24" r="3" fill="#ef3d2f"></circle>
+        </svg>
+      </span>
+      <span>
+        <strong>Vexora</strong>
+        <small>geografia em jogo</small>
+      </span>
+    </button>
+    <nav aria-label="Seções">
+      <button type="button" data-go="home">Início</button>
+      <button type="button" data-go="modes">Jogar</button>
+      <button type="button" data-go="learn">Atlas</button>
+      <button type="button" data-go="ranking">Ranking</button>
+      <button type="button" data-go="friends">Amigos</button>
+      <button type="button" data-go="profile">Meu perfil</button>
+    </nav>
+    <div class="top-actions">
+      <button class="sound" id="notifyBtn" type="button" hidden>Avisos <span id="notifyCount" class="count" hidden></span></button>
+      <div id="notifyPanel" class="notify-panel" hidden></div>
+      <button class="sound" id="logoutBtn" type="button" hidden>Sair</button>
+      <button class="sound" id="soundToggle" type="button" aria-pressed="true">Som ligado</button>
+    </div>
+  </header>
+
+  <p id="bootError" class="banner" hidden></p>
+
+  <main id="conteudo">
+    <section class="view is-on" data-view="home">
+      <div class="hero">
+        <div class="hero-copy">
+          <p class="kicker">Atlas de bolso</p>
+          <h1>Qual país veste esta bandeira?</h1>
+          <p class="lead">Uma bandeira no centro, quatro países em volta e a pontuação subindo quando a memória acerta em cheio.</p>
+          <div class="cta">
+            <button class="btn primary" type="button" data-go="modes">Começar a jogar</button>
+            <button class="btn ghost" type="button" data-go="learn">Abrir o atlas</button>
+          </div>
+          <p class="home-record" id="homeRecord">Seu primeiro recorde começa agora.</p>
+          <label class="name-row">Jogando como
+            <input id="playerName" type="text" maxlength="24" readonly>
+          </label>
+        </div>
+        <div class="hero-art" aria-hidden="true">
+          <img class="float f1" alt="" src="flags/br.png">
+          <img class="float f2" alt="" src="flags/jp.png">
+          <img class="float f3" alt="" src="flags/za.png">
+          <img class="float f4" alt="" src="flags/no.png">
+          <img class="float f5" alt="" src="flags/ca.png">
+        </div>
+      </div>
+
+      <div class="stat-strip" id="homeStats"></div>
+
+      <ol class="steps">
+        <li>
+          <span>01</span>
+          <h2>Leia a bandeira</h2>
+          <p>Cores, faixas e emblemas. O pano entra sozinho no centro da mesa.</p>
+        </li>
+        <li>
+          <span>02</span>
+          <h2>Escolha o país</h2>
+          <p>Quatro nomes, sempre diferentes. Um deles é o dono da bandeira.</p>
+        </li>
+        <li>
+          <span>03</span>
+          <h2>Cace o recorde</h2>
+          <p>Sequência e reflexo aumentam o placar. A conta guarda os pontos em qualquer aparelho.</p>
+        </li>
+      </ol>
+    </section>
+
+    <section class="view" data-view="modes" hidden>
+      <p class="kicker">Escolha a travessia</p>
+      <h1>Quatro jeitos de ver o mundo</h1>
+      <div id="continueBox"></div>
+      <div class="mode-grid">
+        <button class="mode-card" type="button" data-mode="classic">
+          <span class="mode-kicker">10 bandeiras</span>
+          <strong>Clássico</strong>
+          <p>Dez bandeiras misturadas: fáceis, médias e difíceis, sem repetir.</p>
+          <em data-best="classic">Sem recorde ainda</em>
+        </button>
+        <button class="mode-card" type="button" data-mode="infinite">
+          <span class="mode-kicker">Sem repetir</span>
+          <strong>Infinito</strong>
+          <p>A mesma mistura o tempo todo, sem repetir bandeira.</p>
+          <em data-best="infinite">Sem recorde ainda</em>
+        </button>
+        <button class="mode-card" type="button" data-mode="timed">
+          <span class="mode-kicker">60 segundos</span>
+          <strong>Contra o tempo</strong>
+          <p>Sessenta segundos na mesma mistura. Reflexo vale bônus.</p>
+          <em data-best="timed">Sem recorde ainda</em>
+        </button>
+        <button class="mode-card" type="button" data-mode="world">
+          <span class="mode-kicker">Atlas inteiro</span>
+          <strong>Desafio mundial</strong>
+          <p>Todas as bandeiras, na mesma mistura, sem uma fila só de fáceis ou só de difíceis.</p>
+          <em data-best="world">Sem recorde ainda</em>
+        </button>
+      </div>
+      <aside class="score-note">
+        <h2>Como os pontos sobem</h2>
+        <p>Acerto vale 100. Cada acerto seguido soma mais 10. Resposta em menos de 2 segundos vale +50, em menos de 4 vale +30 e em menos de 7 vale +15. Errar zera a sequência e revela o país certo.</p>
+      </aside>
+    </section>
+
+    <section class="view" data-view="quiz" hidden>
+      <div class="panel quiz-shell">
+        <div class="quiz-top">
+          <div>
+            <p class="kicker" id="quizMode">Clássico</p>
+            <h1>De quem é esta bandeira?</h1>
+          </div>
+          <div class="quiz-stats">
+            <div class="stat"><span>Pontos</span><strong id="scoreStat">0</strong></div>
+            <div class="stat" id="streakBox"><span>Sequência</span><strong id="streakStat">0</strong></div>
+            <div class="stat timer" id="timerBox" hidden><span>Tempo</span><strong id="timerStat">60s</strong></div>
+          </div>
+        </div>
+        <div class="progress" aria-hidden="true"><span id="bar"></span></div>
+        <p class="progress-label" id="progressLabel"></p>
+        <p class="note" id="lapNote" hidden></p>
+        <div class="stage" id="stage">
+          <span class="level-pill" id="levelPill">Costa conhecida</span>
+          <img id="flag" alt="Bandeira para identificar" width="640" height="420" decoding="async">
+        </div>
+        <p class="feedback" id="feedback" hidden></p>
+        <div class="options" id="options"></div>
+        <p class="hint">Teclas 1 a 4 respondem · Enter avança</p>
+        <div class="quiz-actions">
+          <button class="btn primary" id="nextBtn" type="button" hidden>Próxima bandeira</button>
+          <button class="btn ghost" id="stopBtn" type="button">Encerrar partida</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="view" data-view="results" hidden>
+      <div class="panel" id="resultsMount"></div>
+    </section>
+
+    <section class="view" data-view="ranking" hidden>
+      <p class="kicker">Placar</p>
+      <h1>Quem leu melhor o mapa</h1>
+      <p class="who" id="rankWho"></p>
+      <div class="chips" id="rankChips">
+        <button class="chip is-on" type="button" data-mode="all">Todos</button>
+        <button class="chip" type="button" data-mode="classic">Clássico</button>
+        <button class="chip" type="button" data-mode="infinite">Infinito</button>
+        <button class="chip" type="button" data-mode="timed">Contra o tempo</button>
+        <button class="chip" type="button" data-mode="world">Desafio mundial</button>
+      </div>
+      <div id="rankMount"></div>
+      <button class="btn ghost wipe" id="wipeBtn" type="button">Limpar o cache deste aparelho</button>
+    </section>
+
+    <section class="view" data-view="learn" hidden>
+      <p class="kicker">Sala de mapas</p>
+      <h1>Explore as bandeiras com calma</h1>
+      <div class="learn-tools">
+        <input id="learnSearch" type="search" placeholder="Buscar país ou capital" aria-label="Buscar país ou capital">
+        <button class="btn ghost" id="blindToggle" type="button" aria-pressed="false">Ocultar nomes</button>
+      </div>
+      <div class="chips" id="learnChips">
+        <button class="chip is-on" type="button" data-region="Todas">Todas</button>
+        <button class="chip" type="button" data-region="Américas">Américas</button>
+        <button class="chip" type="button" data-region="Europa">Europa</button>
+        <button class="chip" type="button" data-region="África">África</button>
+        <button class="chip" type="button" data-region="Ásia">Ásia</button>
+        <button class="chip" type="button" data-region="Oceania">Oceania</button>
+      </div>
+      <p class="empty" id="learnEmpty" hidden>Nenhuma bandeira com esse filtro.</p>
+      <div class="learn-grid" id="learnGrid"></div>
+    </section>
+
+    <section class="view" data-view="friends" hidden>
+      <p class="kicker">Comunidade</p>
+      <h1>Amigos</h1>
+      <div id="friendsMount"></div>
+    </section>
+
+    <section class="view" data-view="profile" hidden>
+      <p class="kicker">Sua conta</p>
+      <h1>Meu perfil</h1>
+      <div id="profileMount"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer" id="atlasNote"></footer>
+  <noscript><p class="banner">O Vexora precisa de JavaScript para o jogo e para a conta.</p></noscript>
+
+  <script src="js/countries.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/audio.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/account.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
